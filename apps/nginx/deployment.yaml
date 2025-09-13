@@ -4,6 +4,8 @@ metadata:
   name: nginx
   labels:
     app: nginx
+  annotations:
+    notifications.argoproj.io/subscribe.on-sync-status-change.telegram: ""
 spec:
   replicas: 5
   selector:
