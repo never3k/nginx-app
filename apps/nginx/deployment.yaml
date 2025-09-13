@@ -1,23 +1,20 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: argoproj.io/v1alpha1
+kind: Application
 metadata:
-  name: nginx
-  labels:
-    app: nginx
+  name: nginx-app
+  namespace: argocd
   annotations:
     notifications.argoproj.io/subscribe.on-sync-status-change.telegram: ""
 spec:
-  replicas: 5
-  selector:
-    matchLabels:
-      app: nginx
-  template:
-    metadata:
-      labels:
-        app: nginx
-    spec:
-      containers:
-      - name: nginx
-        image: nginx:1.25
-        ports:
-        - containerPort: 80
+  project: default
+  source:
+    repoURL: https://github.com/never3k/nginx-app.git
+    path: apps/nginx
+    targetRevision: HEAD
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
